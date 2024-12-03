@@ -1,16 +1,17 @@
 package main
 
 import (
+	// Import the generated docs
+
 	"math/rand"
 	"net/http"
 	"time"
-
-	// Import the generated docs
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"systementor.se/cloudgolangapi/data"
+	docs "systementor.se/cloudgolangapi/docs"
 )
 
 var config Config
@@ -30,6 +31,7 @@ func apiStats(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"totalGames": totalGames, "wins": wins})
 }
 
+// @BasePath /api/v1
 // @Summary Play the game
 // @Description Play a game of stone, scissor, bag
 // @Param yourSelection query string true "Your selection"
@@ -89,11 +91,13 @@ func main() {
 		config.Database.Port)
 
 	router := gin.Default()
-	// Swagger setup
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	docs.SwaggerInfo.BasePath = "/"
+
 	router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
+	// Swagger setup
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// router.GET("/api/employee/:id", apiEmployeeById)
 	// router.PUT("/api/employee/:id", apiEmployeeUpdateById)
 	// router.DELETE("/api/employee/:id", apiEmployeeDeleteById)
