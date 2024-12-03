@@ -1,0 +1,19 @@
+info:
+  contact: {}
+paths:
+  /api/play:
+    get:
+      description: Play a game of stone, scissor, bag
+      parameters:
+      - description: Your selection
+        in: query
+        name: yourSelection
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Winner
+          schema:
+            type: string
+      summary: Play the game
+swagger: "2.0"

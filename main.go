@@ -5,7 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	// Import the generated docs
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"systementor.se/cloudgolangapi/data"
 )
 
@@ -13,7 +17,7 @@ var config Config
 var theRandom *rand.Rand
 
 func start(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen"})
+	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, spela genom att välja sten, sax, påse. api/play?yourSelection=SCISSOR/BAG/STONE"})
 }
 
 func enableCors(c *gin.Context) {
@@ -26,6 +30,11 @@ func apiStats(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"totalGames": totalGames, "wins": wins})
 }
 
+// @Summary Play the game
+// @Description Play a game of stone, scissor, bag
+// @Param yourSelection query string true "Your selection"
+// @Success 200 {string} string "Winner"
+// @Router /api/play [get]
 func apiPlay(c *gin.Context) {
 	enableCors(c)
 	yourSelection := c.Query("yourSelection")
@@ -80,6 +89,8 @@ func main() {
 		config.Database.Port)
 
 	router := gin.Default()
+	// Swagger setup
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
