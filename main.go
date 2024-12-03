@@ -17,14 +17,22 @@ import (
 var config Config
 var theRandom *rand.Rand
 
+// @Summary Get start
+// @Description Get startpage
+// @Success 200 {object} map[string]interface{}
+// @Router / [get]
 func start(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, spela genom att välja sten, sax, påse. api/play?yourSelection=SCISSOR/BAG/STONE"})
+	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
 }
 
 func enableCors(c *gin.Context) {
 	(*c).Header("Access-Control-Allow-Origin", "*")
 }
 
+// @Summary Get stats
+// @Description Get game statistics
+// @Success 200 {object} map[string]interface{}
+// @Router /api/stats [get]
 func apiStats(c *gin.Context) {
 	enableCors(c)
 	totalGames, wins := data.Stats()
@@ -91,6 +99,7 @@ func main() {
 		config.Database.Port)
 
 	router := gin.Default()
+	// Swagger docs
 	docs.SwaggerInfo.BasePath = "/"
 
 	router.GET("/", start)
