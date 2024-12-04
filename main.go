@@ -21,10 +21,10 @@ var theRandom *rand.Rand
 // @Description Get startpage
 // @Success 200 {object} map[string]interface{}
 // @Router / [get]
-//func start(c *gin.Context) {
-//c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
-//c.HTML(http.StatusOK, ginSwagger.WrapHandler(swaggerFiles.Handler))
-//}
+func start(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
+
+}
 
 func enableCors(c *gin.Context) {
 	(*c).Header("Access-Control-Allow-Origin", "*")
@@ -104,8 +104,8 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
 	// Serve the Swagger UI at the root endpoint
-	router.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	//router.GET("/", start)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
 	// Swagger setup
