@@ -21,12 +21,10 @@ var theRandom *rand.Rand
 // @Description Get startpage
 // @Success 200 {object} map[string]interface{}
 // @Router / [get]
-func start(c *gin.Context) {
-	//c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
-	c.HTML(http.StatusOK, s/, ginSwagger.WrapHandler(swaggerFiles.Handler))
-}
-
-
+//func start(c *gin.Context) {
+//c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
+//c.HTML(http.StatusOK, ginSwagger.WrapHandler(swaggerFiles.Handler))
+//}
 
 func enableCors(c *gin.Context) {
 	(*c).Header("Access-Control-Allow-Origin", "*")
@@ -44,7 +42,7 @@ func apiStats(c *gin.Context) {
 
 // @BasePath /api/v1
 // @Summary Play the game
-// @Description Play a game of stone, scissor, bag
+// @Description Play a game of rock, paper, scissor
 // @Param yourSelection query string true "Your selection"
 // @Success 200 {string} string "Winner"
 // @Router /api/play [get]
@@ -53,22 +51,22 @@ func apiPlay(c *gin.Context) {
 	yourSelection := c.Query("yourSelection")
 	mySelection := randomizeSelection()
 	winner := "Tie"
-	if yourSelection == "STONE" && mySelection == "SCISSOR" {
+	if yourSelection == "ROCK" && mySelection == "SCISSOR" {
 		winner = "You"
 	}
-	if yourSelection == "SCISSOR" && mySelection == "BAG" {
+	if yourSelection == "SCISSOR" && mySelection == "PAPER" {
 		winner = "You"
 	}
-	if yourSelection == "BAG" && mySelection == "STONE" {
+	if yourSelection == "PAPER" && mySelection == "ROCK" {
 		winner = "You"
 	}
-	if mySelection == "STONE" && yourSelection == "SCISSOR" {
+	if mySelection == "ROCK" && yourSelection == "SCISSOR" {
 		winner = "Computer"
 	}
-	if mySelection == "SCISSOR" && yourSelection == "BAG" {
+	if mySelection == "SCISSOR" && yourSelection == "PAPER" {
 		winner = "Computer"
 	}
-	if mySelection == "BAG" && yourSelection == "STONE" {
+	if mySelection == "PAPER" && yourSelection == "STONE" {
 		winner = "Computer"
 	}
 	data.SaveGame(yourSelection, mySelection, winner)
@@ -78,13 +76,13 @@ func apiPlay(c *gin.Context) {
 func randomizeSelection() string {
 	val := theRandom.Intn(3) + 1
 	if val == 1 {
-		return "STONE"
+		return "ROCK"
 	}
 	if val == 2 {
 		return "SCISSOR"
 	}
 	if val == 3 {
-		return "BAG"
+		return "PAPER"
 	}
 	return "ERROR"
 
@@ -106,7 +104,7 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
 	// Serve the Swagger UI at the root endpoint
-    router.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	//router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
