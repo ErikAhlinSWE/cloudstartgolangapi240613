@@ -22,8 +22,11 @@ var theRandom *rand.Rand
 // @Success 200 {object} map[string]interface{}
 // @Router / [get]
 func start(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
+	//c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
+	c.HTML(http.StatusOK, s/, ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
+
+
 
 func enableCors(c *gin.Context) {
 	(*c).Header("Access-Control-Allow-Origin", "*")
@@ -102,11 +105,13 @@ func main() {
 	// Swagger docs
 	docs.SwaggerInfo.BasePath = "/"
 
-	router.GET("/", start)
+	// Serve the Swagger UI at the root endpoint
+    router.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
 	// Swagger setup
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// router.GET("/api/employee/:id", apiEmployeeById)
 	// router.PUT("/api/employee/:id", apiEmployeeUpdateById)
 	// router.DELETE("/api/employee/:id", apiEmployeeDeleteById)
