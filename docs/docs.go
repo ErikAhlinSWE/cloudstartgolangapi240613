@@ -32,7 +32,7 @@ const docTemplate = `{
         },
         "/api/play": {
             "get": {
-                "description": "Play a game of stone, scissor, bag",
+                "description": "Play a game of rock, paper, scissor",
                 "summary": "Play the game",
                 "parameters": [
                     {

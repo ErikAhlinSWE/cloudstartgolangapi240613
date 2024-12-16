@@ -13,7 +13,7 @@ paths:
       summary: Get start
   /api/play:
     get:
-      description: Play a game of stone, scissor, bag
+      description: Play a game of rock, paper, scissor
       parameters:
       - description: Your selection
         in: query

@@ -5,6 +5,7 @@ import (
 
 	"math/rand"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,7 @@ var theRandom *rand.Rand
 // @Summary Get start
 // @Description Get startpage
 // @Success 200 {object} map[string]interface{}
-// @Router / [get]
+// @Router /swagger/index.html [get]
 func start(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
 
@@ -47,9 +48,9 @@ func apiStats(c *gin.Context) {
 // @Success 200 {string} string "Winner"
 // @Router /api/play [get]
 func apiPlay(c *gin.Context) {
-	enableCors(c)
+	mySelection := RandomizeSelection()
 	yourSelection := c.Query("yourSelection")
-	mySelection := randomizeSelection()
+	yourSelection = strings.ToUpper(yourSelection)
 	winner := "Tie"
 	if yourSelection == "ROCK" && mySelection == "SCISSOR" {
 		winner = "You"
@@ -66,14 +67,14 @@ func apiPlay(c *gin.Context) {
 	if mySelection == "SCISSOR" && yourSelection == "PAPER" {
 		winner = "Computer"
 	}
-	if mySelection == "PAPER" && yourSelection == "STONE" {
+	if mySelection == "PAPER" && yourSelection == "ROCK" {
 		winner = "Computer"
 	}
 	data.SaveGame(yourSelection, mySelection, winner)
 	c.JSON(http.StatusOK, gin.H{"winner": winner, "yourSelection": yourSelection, "computerSelection": mySelection})
 }
 
-func randomizeSelection() string {
+var RandomizeSelection = func() string {
 	val := theRandom.Intn(3) + 1
 	if val == 1 {
 		return "ROCK"
@@ -85,7 +86,6 @@ func randomizeSelection() string {
 		return "PAPER"
 	}
 	return "ERROR"
-
 }
 
 func main() {
