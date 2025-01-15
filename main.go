@@ -6,9 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"     // swagger embed files
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	"github.com/gin-gonic/gin" // swagger embed files
+	// gin-swagger middleware
 	"systementor.se/cloudgolangapi/data"
 	docs "systementor.se/cloudgolangapi/docs" // swagger docs
 )
@@ -110,6 +109,8 @@ func apiPlay(c *gin.Context) {
 
 }
 
+// @host petstore.swagger.io
+// @BasePath /v2
 func main() {
 	readConfig(&config)
 
@@ -125,7 +126,9 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
 	// Serve the Swagger UI at the root endpoint
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//router.Get("/swagger/*", httpSwagger.Handler(
+	//	httpSwagger.URL("http://golangsite1204.chickenkiller.com/swagger/doc.json"), //The url pointing to API definition
+	//))
 	router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
