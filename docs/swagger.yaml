@@ -1,16 +1,6 @@
 info:
   contact: {}
 paths:
-  /:
-    get:
-      description: Get startpage
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Get start
   /api/play:
     get:
       description: Play a game of rock, paper, scissor
@@ -36,4 +26,14 @@ paths:
             additionalProperties: true
             type: object
       summary: Get stats
+  /swagger/index.html:
+    get:
+      description: Get startpage
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get start
 swagger: "2.0"

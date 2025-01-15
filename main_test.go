@@ -22,7 +22,7 @@ func TestApiPlay(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
 	router.GET("/play", apiPlay)
-
+	// list of all testcase
 	tests := []struct {
 		name           string
 		yourSelection  string
@@ -81,7 +81,7 @@ func TestApiPlay(t *testing.T) {
 			},
 		},
 	}
-
+	// run all testcase
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			w := httptest.NewRecorder()

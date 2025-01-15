@@ -1,8 +1,6 @@
 package main
 
 import (
-	// Import the generated docs
-
 	"math/rand"
 	"net/http"
 	"strings"
@@ -12,7 +10,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"systementor.se/cloudgolangapi/data"
-	docs "systementor.se/cloudgolangapi/docs"
+	docs "systementor.se/cloudgolangapi/docs" // swagger docs
 )
 
 var config Config
@@ -23,13 +21,13 @@ type GameStorage interface {
 	SaveGame(yourSelection, computerSelection, winner string) error
 }
 
-// Använd interface istället för direkt databasanrop
+// Database interface
 var gameStorage GameStorage
 
 func init() {
 	source := rand.NewSource(time.Now().UnixNano())
 	theRandom = rand.New(source)
-	// I produktion, använd den riktiga databasimplementationen
+	// In Prod use the real database implemation
 	gameStorage = &data.DBGameStorage{}
 }
 
@@ -39,7 +37,6 @@ func init() {
 // @Router /swagger/index.html [get]
 func start(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
-
 }
 
 func enableCors(c *gin.Context) {
@@ -56,11 +53,6 @@ func apiStats(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"totalGames": totalGames, "wins": wins})
 }
 
-//func RandomizeSelection() string {
-//	selections := []string{"ROCK", "PAPER", "SCISSOR"}
-//	return selections[theRandom.Intn(len(selections))]
-//}
-
 // @BasePath /api/v1
 // @Summary Play the game
 // @Description Play a game of rock, paper, scissor
@@ -68,24 +60,21 @@ func apiStats(c *gin.Context) {
 // @Success 200 {string} string "Winner"
 // @Router /api/play [get]
 func apiPlay(c *gin.Context) {
-	// Konvertera input till uppercase
+	// Convert to uppercase
 	yourSelection := strings.ToUpper(c.Query("yourSelection"))
 
-	// Validera input först
+	// Validat input not empty
 	if yourSelection == "" {
 		c.String(400, "Invalid selection")
 		return
 	}
 
-	// Konvertera input till uppercase
-	yourSelection = strings.ToUpper(yourSelection)
-
-	// Validera input
+	// Validate correct input
 	validMoves := map[string]bool{
 		"ROCK":     true,
 		"PAPER":    true,
 		"SCISSOR":  true,
-		"SCISSORS": true, // Tillåt båda stavningarna
+		"SCISSORS": true, // allow both spellings
 	}
 
 	if !validMoves[yourSelection] {
@@ -93,16 +82,16 @@ func apiPlay(c *gin.Context) {
 		return
 	}
 
-	// Normalisera SCISSORS/SCISSOR till en konsekvent form
+	// Convert SCISSORS --> SCISSOR
 	if yourSelection == "SCISSORS" {
 		yourSelection = "SCISSOR"
 	}
 
-	// Datorns val
+	// Computer choice
 	moves := []string{"ROCK", "PAPER", "SCISSOR"}
 	computerSelection := moves[rand.Intn(len(moves))]
 
-	// Bestäm vinnaren
+	// Game logic
 	var winner string
 	if yourSelection == computerSelection {
 		winner = "Tie"
@@ -115,29 +104,13 @@ func apiPlay(c *gin.Context) {
 	}
 
 	c.String(200, winner)
-	//data.SaveGame(yourSelection, mySelection, winner)
-	// Ignorera eventuella fel vid lagring i testerna
+	// Ignore storing for test
 	_ = gameStorage.SaveGame(yourSelection, computerSelection, winner)
 	c.JSON(http.StatusOK, gin.H{"winner": winner, "yourSelection": yourSelection, "computerSelection": computerSelection})
 
 }
 
-//var RandomizeSelection = func() string {
-//	val := theRandom.Intn(3) + 1
-//	if val == 1 {
-//		return "ROCK"
-//	}
-//	if val == 2 {
-//		return "SCISSOR"
-//	}
-//	if val == 3 {
-//		return "PAPER"
-//	}
-//	return "ERROR"
-//}
-
 func main() {
-	//theRandom = rand.New(rand.NewSource(time.Now().UnixNano()))
 	readConfig(&config)
 
 	data.InitDatabase(config.Database.File,
@@ -157,15 +130,5 @@ func main() {
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
 	// Swagger setup
-	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	// router.GET("/api/employee/:id", apiEmployeeById)
-	// router.PUT("/api/employee/:id", apiEmployeeUpdateById)
-	// router.DELETE("/api/employee/:id", apiEmployeeDeleteById)
-	// router.POST("/api/employee", apiEmployeeAdd)
-
-	// router.GET("/api/employees", employeesJson)
-	// router.GET("/api/addemployee", addEmployee)
-	// router.GET("/api/addmanyemployees", addManyEmployees)
 	router.Run(":8080")
-
 }

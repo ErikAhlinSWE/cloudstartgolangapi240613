@@ -15,21 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/": {
-            "get": {
-                "description": "Get startpage",
-                "summary": "Get start",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/api/play": {
             "get": {
                 "description": "Play a game of rock, paper, scissor",
@@ -57,6 +42,21 @@ const docTemplate = `{
             "get": {
                 "description": "Get game statistics",
                 "summary": "Get stats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/swagger/index.html": {
+            "get": {
+                "description": "Get startpage",
+                "summary": "Get start",
                 "responses": {
                     "200": {
                         "description": "OK",
