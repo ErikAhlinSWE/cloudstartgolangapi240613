@@ -5,7 +5,7 @@ WORKDIR $GOPATH/src/mypackage/myapp/
 COPY . .
 
 RUN go get -d -v
-
+RUN go test
 RUN go build -o /app/cmd/site
 
 FROM scratch

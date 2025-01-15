@@ -30,9 +30,15 @@ func Stats() (int, int) {
 	return int(antal), int(wins)
 }
 
-func SaveGame(yourSelection, mySelection, winner string) {
-	DB.Create(&Game{Winner: winner, YourSelection: yourSelection, MySelection: mySelection, CreatedAt: time.Now()})
+type DBGameStorage struct{}
+
+func (d *DBGameStorage) SaveGame(yourSelection, computerSelection, winner string) error {
+	return DB.Create(&Game{Winner: winner, YourSelection: yourSelection, ComputerSelection: computerSelection, CreatedAt: time.Now()}).Error
 }
+
+//func SaveGame(yourSelection, mySelection, winner string) {
+//	DB.Create(&Game{Winner: winner, YourSelection: yourSelection, MySelection: mySelection, CreatedAt: time.Now()})
+//}
 
 func InitDatabase(file, server, database, username, password string, port int) {
 	if len(file) == 0 {
