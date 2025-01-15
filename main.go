@@ -6,8 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin" // swagger embed files
-	// gin-swagger middleware
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"systementor.se/cloudgolangapi/data"
 	docs "systementor.se/cloudgolangapi/docs" // swagger docs
 )
@@ -46,6 +47,7 @@ func enableCors(c *gin.Context) {
 // @Description Get game statistics
 // @Success 200 {object} map[string]interface{}
 // @Router /api/stats [get]
+// @Produce json
 func apiStats(c *gin.Context) {
 	enableCors(c)
 	totalGames, wins := data.Stats()
@@ -58,6 +60,7 @@ func apiStats(c *gin.Context) {
 // @Param yourSelection query string true "Your selection"
 // @Success 200 {string} string "Winner"
 // @Router /api/play [get]
+// @Produce json
 func apiPlay(c *gin.Context) {
 	// Convert to uppercase
 	yourSelection := strings.ToUpper(c.Query("yourSelection"))
@@ -109,8 +112,6 @@ func apiPlay(c *gin.Context) {
 
 }
 
-// @host petstore.swagger.io
-// @BasePath /v2
 func main() {
 	readConfig(&config)
 
@@ -122,16 +123,13 @@ func main() {
 		config.Database.Port)
 
 	router := gin.Default()
-	// Swagger docs
 	docs.SwaggerInfo.BasePath = "/"
-
-	// Serve the Swagger UI at the root endpoint
-	//router.Get("/swagger/*", httpSwagger.Handler(
-	//	httpSwagger.URL("http://golangsite1204.chickenkiller.com/swagger/doc.json"), //The url pointing to API definition
-	//))
+	/// Swagger setup
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
 	// Swagger setup
+	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080")
 }

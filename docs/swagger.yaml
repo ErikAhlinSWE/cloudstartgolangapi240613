@@ -10,6 +10,8 @@ paths:
         name: yourSelection
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: Winner
@@ -19,6 +21,8 @@ paths:
   /api/stats:
     get:
       description: Get game statistics
+      produces:
+      - application/json
       responses:
         "200":
           description: OK

@@ -18,6 +18,9 @@ const docTemplate = `{
         "/api/play": {
             "get": {
                 "description": "Play a game of rock, paper, scissor",
+                "produces": [
+                    "application/json"
+                ],
                 "summary": "Play the game",
                 "parameters": [
                     {
@@ -41,6 +44,9 @@ const docTemplate = `{
         "/api/stats": {
             "get": {
                 "description": "Get game statistics",
+                "produces": [
+                    "application/json"
+                ],
                 "summary": "Get stats",
                 "responses": {
                     "200": {
