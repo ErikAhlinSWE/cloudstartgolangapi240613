@@ -48,13 +48,13 @@
                 }
             }
         },
-        "/swagger/index.html": {
+        "/": {
             "get": {
                 "description": "Get startpage",
                 "summary": "Get start",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Message Välkommen, /swagger/index.html#/",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true

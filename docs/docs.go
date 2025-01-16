@@ -59,7 +59,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/swagger/index.html": {
+        "/": {
             "get": {
                 "description": "Get startpage",
                 "summary": "Get start",

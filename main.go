@@ -34,7 +34,7 @@ func init() {
 // @Summary Get start
 // @Description Get startpage
 // @Success 200 {object} map[string]interface{}
-// @Router /swagger/index.html [get]
+// @Router /start [get]
 func start(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"Message": "Välkommen, /swagger/index.html#/"})
 }
@@ -129,7 +129,6 @@ func main() {
 	router.GET("/", start)
 	router.GET("/api/play", apiPlay)
 	router.GET("/api/stats", apiStats)
-	// Swagger setup
-	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	router.Run(":8080")
 }

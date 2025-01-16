@@ -30,12 +30,12 @@ paths:
             additionalProperties: true
             type: object
       summary: Get stats
-  /swagger/index.html:
+  /:
     get:
       description: Get startpage
       responses:
         "200":
-          description: OK
+          description: Välkommen, /swagger/index.html#/
           schema:
             additionalProperties: true
             type: object
