@@ -28,4 +28,4 @@ stages:
           USERNAME: $(DOCKER_USERNAME)
           PASSWORD: $(DOCKER_PASSWORD)
 
-#           docker login -u ahlin.erik -p yacloud1 https://git.systementor.se
+           
