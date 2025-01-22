@@ -21,9 +21,9 @@ stages:
       - task: CmdLine@2
         inputs:
           script: |
-            docker build -t git.systementor.se/ahlin.erik/ya1234 .
-            docker login -u $USERNAME -p $PASSWORD https://git.systementor.se            
-            docker push git.systementor.se/ahlin.erik/ya1234 
+            docker build -t eriksgitea.crabdance.com/erikahlin/golangapi .
+            docker login -u $USERNAME -p $PASSWORD https://eriksgitea.crabdance.com           
+            docker push eriksgitea.crabdance.com/erikahlin/golangapi 
         env:
           USERNAME: $(DOCKER_USERNAME)
           PASSWORD: $(DOCKER_PASSWORD)
