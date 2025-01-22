@@ -1,0 +1,29 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: CmdLine@2
+        inputs:
+          script: |
+            docker build -t eriksgitea.crabdance.com/erikahlin/golangapi .
+            docker login -u $USERNAME -p $PASSWORD https://eriksgitea.crabdance.com           
+            docker push eriksgitea.crabdance.com/erikahlin/golangapi 
+        env:
+          USERNAME: $(DOCKER_USERNAME)
+          PASSWORD: $(DOCKER_PASSWORD)
